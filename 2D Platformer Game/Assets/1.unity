@@ -227,11 +227,12 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 671685482}
-  - component: {fileID: 671685481}
   - component: {fileID: 671685480}
-  - component: {fileID: 671685479}
   - component: {fileID: 671685484}
   - component: {fileID: 671685483}
+  - component: {fileID: 671685481}
+  - component: {fileID: 671685485}
+  - component: {fileID: 671685479}
   m_Layer: 8
   m_Name: Player
   m_TagString: Untagged
@@ -317,25 +318,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 671685478}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d78dbe69123560b47ae73971f4ac6150, type: 3}
+  m_Script: {fileID: 11500000, guid: 846a0fcb777e9254cb7a390dc808b3be, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_JumpForce: 400
-  m_CrouchSpeed: 0.36
-  m_MovementSmoothing: 0.05
-  m_AirControl: 1
-  m_WhatIsGround:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_GroundCheck: {fileID: 1813363430}
-  m_CeilingCheck: {fileID: 1320382720}
-  m_CrouchDisableCollider: {fileID: 0}
-  OnLandEvent:
-    m_PersistentCalls:
-      m_Calls: []
-  OnCrouchEvent:
-    m_PersistentCalls:
-      m_Calls: []
+  speed: 10
+  jump: 0.69
 --- !u!4 &671685482
 Transform:
   m_ObjectHideFlags: 0
@@ -394,6 +381,18 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1.1782424, y: 0.8900058}
   m_EdgeRadius: 0
+--- !u!114 &671685485
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 671685478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4b8649d1d0768294a84fd4343994bbc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1320382719
 GameObject:
   m_ObjectHideFlags: 0
@@ -476,7 +475,7 @@ Camera:
   far clip plane: 1000
   field of view: 60
   orthographic: 1
-  orthographic size: 5
+  orthographic size: 12.828025
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
