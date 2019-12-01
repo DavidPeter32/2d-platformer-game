@@ -9,11 +9,13 @@ public class PlayerMovement : MonoBehaviour
     private float moveInput;
     private bool facingRight = true;
 
+    private Animator anim;
     private Rigidbody2D rb;
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>();
     }
 
     // Update is called once per frame
@@ -26,8 +28,13 @@ public class PlayerMovement : MonoBehaviour
     }
     void FixedUpdate()
     {
+        PlayerWalk();
 
-        moveInput = Input.GetAxis("Horizontal");
+
+    }
+    void PlayerWalk()
+    {
+        moveInput = Input.GetAxisRaw("Horizontal");
         Debug.Log(moveInput);
         rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
         if (facingRight == true && moveInput < 0)
@@ -38,8 +45,8 @@ public class PlayerMovement : MonoBehaviour
         {
             flip();
         }
+        anim.SetInteger("Speed", Mathf.Abs((int)rb.velocity.x));
     }
-
     void flip()
     {
         facingRight = !facingRight;
