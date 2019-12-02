@@ -6,9 +6,12 @@ public class PlayerMovement : MonoBehaviour
 {
     public float speed ;
     public float jumpForce;
+    public Transform GroundCheck;
+    public LayerMask Ground;
     private float moveInput;
     private bool facingRight = true;
-
+    private bool isGrounded;
+    private bool jumped;
     private Animator anim;
     private Rigidbody2D rb;
     // Start is called before the first frame update
@@ -21,15 +24,13 @@ public class PlayerMovement : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.UpArrow))
-        {
-            rb.velocity = Vector2.up * jumpForce;
-        }
+        PlayerJump();
+        CheckIfGrounded();
     }
     void FixedUpdate()
     {
         PlayerWalk();
-
+        
 
     }
     void PlayerWalk()
@@ -54,6 +55,30 @@ public class PlayerMovement : MonoBehaviour
         Scale.x *= -1;
         transform.localScale = Scale;
 
+    }
+    void CheckIfGrounded()
+    {
+        isGrounded = Physics2D.Raycast(GroundCheck.position, Vector2.down, 0.1f, Ground);
+        if(isGrounded)
+        {
+            if(jumped)
+            {
+                jumped = false;
+                anim.SetBool("Jump", false);
+            }
+        }
+    }
+    void PlayerJump()
+    {
+        if(isGrounded)
+        {
+            if(Input.GetKey(KeyCode.Space)||Input.GetKey(KeyCode.UpArrow))
+            {
+                jumped = true;
+                rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+                anim.SetBool("Jump", true);
+            }
+        }
     }
 
 }
