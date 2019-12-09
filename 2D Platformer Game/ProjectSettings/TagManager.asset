@@ -3,7 +3,9 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - Collectable
+  - Enemy
   layers:
   - Default
   - TransparentFX
@@ -13,9 +15,9 @@ TagManager:
   - UI
   - 
   - 
-  - Ground
-  - 
-  - 
+  - Platforms
+  - 'Ground '
+  - Player
   - 
   - 
   - 
@@ -40,4 +42,19 @@ TagManager:
   m_SortingLayers:
   - name: Default
     uniqueID: 0
+    locked: 0
+  - name: BacgroundBack
+    uniqueID: 475043865
+    locked: 0
+  - name: BacgroundFront
+    uniqueID: 826541069
+    locked: 0
+  - name: FillIn
+    uniqueID: 2195668551
+    locked: 0
+  - name: Platforms
+    uniqueID: 1480704135
+    locked: 0
+  - name: MovingObject
+    uniqueID: 1890713665
     locked: 0
