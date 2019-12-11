@@ -6,7 +6,7 @@ public class PlayerInteraction : MonoBehaviour
 {
 
     public Text CoinCountText;
-    public PlayerMovement Player;
+    //public PlayerMovement Player;
     public int CoinCount = 0;
     public Transform AttackCheck;
     public LayerMask Enemy;

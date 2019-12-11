@@ -4,10 +4,14 @@ using UnityEngine;
 
 public class HellGatoScript : MonoBehaviour
 {
-    // Start is called before the first frame update
+    private Animator anim;
+    private PolygonCollider2D collider;
+    private Rigidbody2D rb;
+
     void Start()
     {
-        
+        anim = GetComponent<Animator>();
+        collider = GetComponent<PolygonCollider2D>();
     }
 
     // Update is called once per frame
@@ -15,4 +19,16 @@ public class HellGatoScript : MonoBehaviour
     {
         
     }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+
+        if (collision.tag == "Sword")
+        {
+            anim.SetBool("isDead", true);
+            //Destroy(GetComponent<PolygonCollider2D>());
+            Destroy(gameObject,0.40f);
+            
+        }
+    }
 }
+
