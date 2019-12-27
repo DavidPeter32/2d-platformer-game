@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerController : MonoBehaviour
+public class PlayerMovement : MonoBehaviour
 {
     private enum State {idl,walk,jump,attack,jumpattack,hurt}
     private State state=State.idl;
@@ -24,9 +24,18 @@ public class PlayerController : MonoBehaviour
     private bool isHurt = false;
     public float HurtForceX;
     public float HurtForceY;
-    public int healt=5;
+    private int health=5;
     public Slider HP;
+    private static PlayerMovement instance;
 
+    public static PlayerMovement Instance
+    {
+        get
+        {
+            if (instance == null) instance = PlayerMovement.FindObjectOfType<PlayerMovement>();
+            return instance;
+        }
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -49,7 +58,7 @@ public class PlayerController : MonoBehaviour
         StateSet();
         PlayerDeath();
         anim.SetInteger("State", (int)state);
-        HP.value = healt;
+        HP.value = health;
 
     }
     void FixedUpdate()
@@ -61,19 +70,18 @@ public class PlayerController : MonoBehaviour
     {
         state = State.walk;
         moveInput = Input.GetAxisRaw("Horizontal");
-        Debug.Log(moveInput);
         rb.velocity = new Vector2(moveInput * speed, rb.velocity.y);
         if (facingRight == true && moveInput < 0)
         {
-            flip();
+            flipCharacter();
         }
         else if (facingRight == false && moveInput > 0)
         {
-            flip();
+            flipCharacter();
         }
         anim.SetInteger("Speed", Mathf.Abs((int)rb.velocity.x));
     }
-    public void flip()
+    public void flipCharacter()
     {
         facingRight = !facingRight;
         Vector3 Scale = transform.localScale;
@@ -137,7 +145,7 @@ public class PlayerController : MonoBehaviour
             if (state != State.attack && state != State.jumpattack)
             {
                 state = State.hurt;
-                healt--;
+                health--;
                 if (collision.gameObject.transform.position.x > transform.position.x)
                 {
                     rb.velocity = new Vector2(-HurtForceX, HurtForceY);
@@ -184,7 +192,7 @@ public class PlayerController : MonoBehaviour
     }
     void PlayerDeath()
     {
-        if(healt==0)
+        if(health==0)
         {
             Destroy(gameObject);
         }

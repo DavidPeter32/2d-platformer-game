@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerController : MonoBehaviour
 {
-    private enum State {idl,walk,jump,attack,jumpattack,hurt}
-    private State state=State.idl;
-    public float speed ;
+    private enum State { idl, walk, jump, attack, jumpattack, hurt }
+    private State state = State.idl;
+    public float speed;
     public float jumpForce;
     public Transform GroundCheck;
     public LayerMask Ground;
@@ -20,13 +20,12 @@ public class PlayerMovement : MonoBehaviour
     private Rigidbody2D rb;
     private bool isAttacking = false;
     private float AttackTimer = 0;
-    private float AttackCoolDown= 0.3f ;
+    private float AttackCoolDown = 0.3f;
     private bool isHurt = false;
     public float HurtForceX;
     public float HurtForceY;
-    public int healt=5;
+    public int health = 5;
     public Slider HP;
-
     // Start is called before the first frame update
     void Start()
     {
@@ -40,7 +39,7 @@ public class PlayerMovement : MonoBehaviour
         if (state != State.hurt)
         {
             PlayerWalk();
-            
+
         }
         //PlayerWalk();
         PlayerJump();
@@ -49,12 +48,12 @@ public class PlayerMovement : MonoBehaviour
         StateSet();
         PlayerDeath();
         anim.SetInteger("State", (int)state);
-        HP.value = healt;
+        HP.value = health;
 
     }
     void FixedUpdate()
     {
-        
+
 
     }
     void PlayerWalk()
@@ -71,7 +70,6 @@ public class PlayerMovement : MonoBehaviour
         {
             flip();
         }
-        anim.SetInteger("Speed", Mathf.Abs((int)rb.velocity.x));
     }
     public void flip()
     {
@@ -83,12 +81,12 @@ public class PlayerMovement : MonoBehaviour
     }
     void CheckIfGrounded()
     {
-        isGrounded = Physics2D.Raycast(GroundCheck.position, Vector2.down,0.1f, Ground);
-        if(isGrounded)
+        isGrounded = Physics2D.Raycast(GroundCheck.position, Vector2.down, 0.1f, Ground);
+        if (isGrounded)
         {
-            if(jumped)
+            if (jumped)
             {
-                
+
                 jumped = false;
                 anim.SetBool("Jump", false);
             }
@@ -96,11 +94,11 @@ public class PlayerMovement : MonoBehaviour
     }
     void PlayerJump()
     {
-        if(isGrounded)
+        if (isGrounded)
         {
-            if(Input.GetKey(KeyCode.Space)||Input.GetKey(KeyCode.UpArrow))
+            if (Input.GetKey(KeyCode.Space) || Input.GetKey(KeyCode.UpArrow))
             {
-                
+
                 jumped = true;
                 rb.velocity = new Vector2(rb.velocity.x, jumpForce);
                 anim.SetBool("Jump", true);
@@ -122,7 +120,7 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            
+
             isAttacking = false;
             AttackTrigger.enabled = false;
             anim.SetBool("Attacking", false);
@@ -137,7 +135,7 @@ public class PlayerMovement : MonoBehaviour
             if (state != State.attack && state != State.jumpattack)
             {
                 state = State.hurt;
-                healt--;
+                health--;
                 if (collision.gameObject.transform.position.x > transform.position.x)
                 {
                     rb.velocity = new Vector2(-HurtForceX, HurtForceY);
@@ -148,7 +146,7 @@ public class PlayerMovement : MonoBehaviour
                 }
             }
         }
-    
+
     }
     private void StateSet()
     {
@@ -167,12 +165,12 @@ public class PlayerMovement : MonoBehaviour
         {
             state = State.jump;
         }
-        else if(isAttacking)
+        else if (isAttacking)
         {
             state = State.attack;
         }
-        
-        else if(moveInput!= 0)
+
+        else if (moveInput != 0)
         {
             state = State.walk;
         }
@@ -184,7 +182,7 @@ public class PlayerMovement : MonoBehaviour
     }
     void PlayerDeath()
     {
-        if(healt==0)
+        if (health == 0)
         {
             Destroy(gameObject);
         }
