@@ -26,6 +26,16 @@ public class PlayerController : MonoBehaviour
     public float HurtForceY;
     public int health = 5;
     public Slider HP;
+
+    private static PlayerController instance;
+    public static PlayerController Instance
+    {
+        get
+        {
+            if (instance == null) instance = GameObject.FindObjectOfType<PlayerController>();
+            return instance;
+        }
+    }
     // Start is called before the first frame update
     void Start()
     {
@@ -184,7 +194,7 @@ public class PlayerController : MonoBehaviour
     {
         if (health == 0)
         {
-            Destroy(gameObject);
+            //Destroy(gameObject);
         }
     }
 }
