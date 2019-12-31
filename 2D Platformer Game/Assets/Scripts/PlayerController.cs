@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
+public enum State { idl, walk, jump, attack, jumpattack, hurt,fireball,jumpfireball,dash }
 public class PlayerController : MonoBehaviour
 {
-    private enum State { idl, walk, jump, attack, jumpattack, hurt }
     private State state = State.idl;
     public float speed;
     public float jumpForce;
@@ -26,6 +25,11 @@ public class PlayerController : MonoBehaviour
     public float HurtForceY;
     public int health = 5;
     public Slider HP;
+    public GameObject Fireball;
+    public Transform ShotPoint;
+    private float FireballAttackTimer;
+    public float FireballAttackCoolDown;
+    public static bool isFireball;
 
     private static PlayerController instance;
     public static PlayerController Instance
@@ -41,6 +45,7 @@ public class PlayerController : MonoBehaviour
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        
     }
 
     // Update is called once per frame
@@ -54,10 +59,11 @@ public class PlayerController : MonoBehaviour
         //PlayerWalk();
         PlayerJump();
         CheckIfGrounded();
-        PlayerAttack();
+        PlayerAttack1();
         StateSet();
         PlayerDeath();
         anim.SetInteger("State", (int)state);
+        PlayerAttackFireball();
         HP.value = health;
 
     }
@@ -84,9 +90,7 @@ public class PlayerController : MonoBehaviour
     public void flip()
     {
         facingRight = !facingRight;
-        Vector3 Scale = transform.localScale;
-        Scale.x *= -1;
-        transform.localScale = Scale;
+        transform.Rotate(0f, 180f, 0f);
 
     }
     void CheckIfGrounded()
@@ -115,13 +119,12 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-    void PlayerAttack()
+    void PlayerAttack1()
     {
         if (Input.GetKey(KeyCode.Z) && !isAttacking)
         {
             isAttacking = true;
             AttackTrigger.enabled = true;
-            anim.SetBool("Attacking", true);
             AttackTimer = AttackCoolDown;
         }
         if (AttackTimer > 0)
@@ -133,7 +136,6 @@ public class PlayerController : MonoBehaviour
 
             isAttacking = false;
             AttackTrigger.enabled = false;
-            anim.SetBool("Attacking", false);
         }
     }
 
@@ -167,6 +169,10 @@ public class PlayerController : MonoBehaviour
                 state = State.idl;
             }
         }
+        else if (jumped && isFireball)
+        {
+            state = State.jumpfireball;
+        }
         else if (jumped && isAttacking)
         {
             state = State.jumpattack;
@@ -174,6 +180,10 @@ public class PlayerController : MonoBehaviour
         else if (jumped)
         {
             state = State.jump;
+        }
+        else if (isFireball)
+        {
+            state = State.fireball;
         }
         else if (isAttacking)
         {
@@ -189,6 +199,24 @@ public class PlayerController : MonoBehaviour
             state = State.idl;
         }
 
+    }
+    void PlayerAttackFireball()
+    {
+
+        if (Input.GetKey(KeyCode.X) && !isFireball)
+        {
+            isFireball = true;
+            Instantiate(Fireball, ShotPoint.position, ShotPoint.rotation);
+            FireballAttackTimer = FireballAttackCoolDown;
+        }
+        if (FireballAttackTimer > 0)
+        {
+            FireballAttackTimer -= Time.deltaTime;
+        }
+        else
+        {
+            isFireball = false;
+        }
     }
     void PlayerDeath()
     {

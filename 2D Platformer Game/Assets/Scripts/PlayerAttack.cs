@@ -4,44 +4,47 @@ using UnityEngine;
 
 public class PlayerAttack : MonoBehaviour
 {
-    /*private bool isAttacking = false;
-    private float AttackTimer = 0;
-    private float AttackCoolDown = 0.3f;
-    public Collider2D AttackTrigger;
-    private Animator Attack_anim;
-    
-    private void Awake()
-    {
-        Attack_anim = Player.GetComponent<Animator>();
-    }
-    void Start()
-    {
+    //public GameObject Fireball;
+    //public Transform ShotPoint;
+    //private float FireballAttackTimer;
+    //public float FireballAttackCoolDown;
+    //public static bool isFireball;
+    //private static PlayerAttack instance;
+    //public static PlayerAttack Instance
+    //{
+    //    get
+    //    {
+    //        if (instance == null) instance = GameObject.FindObjectOfType<PlayerController>();
+    //        return instance;
+    //    }
+    //}
+    //void Start()
+    //{
         
-    }
+    //}
 
-    // Update is called once per frame
-    void Update()
-    {
-        Attack();
-    }
-    void Attack()
-    {
-        if (Input.GetKey(KeyCode.Z) && !isAttacking)
-        {
-            isAttacking = true;
-            AttackTrigger.enabled = true;
-            Attack_anim.SetBool("Attacking", true);
-            AttackTimer = AttackCoolDown;
-        }
-        if (AttackTimer > 0)
-        {
-            AttackTimer -= Time.deltaTime;
-        }
-        else
-        {
-            isAttacking = false;
-            AttackTrigger.enabled = false;
-            Attack_anim.SetBool("Attacking", false);
-        }
-    }*/
+    //// Update is called once per frame
+    //void Update()
+    //{
+    //    PlayerAttackFireball();
+    //}
+    //void PlayerAttackFireball()
+    //{
+        
+    //    if (Input.GetKey(KeyCode.X) && !isFireball)
+    //    {
+    //        isFireball = true;
+    //        Instantiate(Fireball, ShotPoint.position, ShotPoint.rotation);
+    //        FireballAttackTimer = FireballAttackCoolDown;
+    //    }
+    //    if (FireballAttackTimer > 0)
+    //    {
+    //        FireballAttackTimer -= Time.deltaTime;
+    //    }
+    //    else
+    //    {
+    //        isFireball = false;
+    //    }
+    //}
+    
 }
