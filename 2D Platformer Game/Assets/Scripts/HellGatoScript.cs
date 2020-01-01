@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class HellGatoScript : MonoBehaviour
 {
-    private enum State { Idl, Follow };
     private Animator anim;
     private PolygonCollider2D collider;
     private Rigidbody2D rb;
@@ -16,6 +15,8 @@ public class HellGatoScript : MonoBehaviour
     public Transform LedgeCheck;
     public Transform WallCheck;
     public LayerMask Platform;
+    public GameObject DeathFire;
+    public Transform DeathFirePoint;
 
     void Start()
     {
@@ -35,9 +36,8 @@ public class HellGatoScript : MonoBehaviour
 
         if (collision.tag == "Sword")
         {
-            anim.SetBool("isDead", true);
-            //Destroy(GetComponent<PolygonCollider2D>());
-            Destroy(gameObject, 0.40f);
+            Instantiate(DeathFire, DeathFirePoint.position, DeathFirePoint.rotation);
+            Destroy(gameObject);
 
         }
     }

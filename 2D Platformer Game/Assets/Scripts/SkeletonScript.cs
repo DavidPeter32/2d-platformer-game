@@ -14,6 +14,8 @@ public class SkeletonScript : MonoBehaviour
     private Animator anim;
     private PolygonCollider2D collider;
     private Rigidbody2D rb;
+    public GameObject DeathFire;
+    public Transform DeathFirePoint;
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -78,8 +80,8 @@ public class SkeletonScript : MonoBehaviour
 
         if (collision.tag == "Sword")
         {
-            state = State.death;
-            Destroy(gameObject, 0.40f);
+            Instantiate(DeathFire, DeathFirePoint.position, DeathFirePoint.rotation);
+            Destroy(gameObject);
 
         }
     }

@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
 {
     private State state = State.idl;
     public float speed;
+    public float dashspeed;
     public float jumpForce;
     public Transform GroundCheck;
     public LayerMask Ground;
@@ -18,6 +19,7 @@ public class PlayerController : MonoBehaviour
     private Animator anim;
     private Rigidbody2D rb;
     private bool isAttacking = false;
+    private bool isDashing = false;
     private float AttackTimer = 0;
     private float AttackCoolDown = 0.3f;
     private bool isHurt = false;
@@ -27,8 +29,10 @@ public class PlayerController : MonoBehaviour
     public Slider HP;
     public GameObject Fireball;
     public Transform ShotPoint;
-    private float FireballAttackTimer;
-    public float FireballAttackCoolDown;
+    public GameObject DashWind;
+    public Transform DashPoint;
+    private float SpecialAbilityTimer =0;
+    private float SpecialAbilityCoolDown = 0.9f;
     public static bool isFireball;
 
     private static PlayerController instance;
@@ -64,6 +68,7 @@ public class PlayerController : MonoBehaviour
         PlayerDeath();
         anim.SetInteger("State", (int)state);
         PlayerAttackFireball();
+        Dash();
         HP.value = health;
 
     }
@@ -139,7 +144,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.tag == "Enemy")
@@ -207,20 +211,43 @@ public class PlayerController : MonoBehaviour
         {
             isFireball = true;
             Instantiate(Fireball, ShotPoint.position, ShotPoint.rotation);
-            FireballAttackTimer = FireballAttackCoolDown;
+            SpecialAbilityTimer = SpecialAbilityCoolDown;
         }
-        if (FireballAttackTimer > 0)
+        if (SpecialAbilityTimer > 0)
         {
-            FireballAttackTimer -= Time.deltaTime;
+            SpecialAbilityTimer -= Time.deltaTime;
         }
         else
         {
             isFireball = false;
         }
     }
+    void Dash()
+    {
+        if (SpecialAbilityTimer <= 0)
+        {
+            if (Input.GetKey(KeyCode.C))
+            {
+                if (facingRight == true)
+                {
+                    rb.velocity =new Vector2(dashspeed, rb.velocity.y);
+                }
+                else
+                {
+                    rb.velocity = new Vector2(-dashspeed, rb.velocity.y);
+                }
+                Instantiate(DashWind, DashPoint.position, DashPoint.rotation);
+                SpecialAbilityTimer = SpecialAbilityCoolDown;
+            }
+        }
+        else
+        {
+            SpecialAbilityTimer -= Time.deltaTime;
+        }
+    }
     void PlayerDeath()
     {
-        if (health == 0)
+        if (health <= 0)
         {
             //Destroy(gameObject);
         }

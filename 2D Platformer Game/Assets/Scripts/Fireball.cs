@@ -11,10 +11,12 @@ public class Fireball : MonoBehaviour
     {
         rb.velocity = transform.right * speed;
     }
-
-    private void OnTriggerEnter2D()
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        
-        Destroy(gameObject);
+        if(collision.tag!="Collectable")
+        {
+            Destroy(gameObject);
+        }
     }
+
 }
