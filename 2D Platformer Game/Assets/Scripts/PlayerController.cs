@@ -26,6 +26,7 @@ public class PlayerController : MonoBehaviour
     public float HurtForceX;
     public float HurtForceY;
     public int health = 5;
+    public int mana = 10;
     public Slider HP;
     public GameObject Fireball;
     public Transform ShotPoint;
@@ -148,18 +149,15 @@ public class PlayerController : MonoBehaviour
     {
         if (collision.gameObject.tag == "Enemy")
         {
-            if (state != State.attack && state != State.jumpattack)
+            state = State.hurt;
+            health--;
+            if (collision.gameObject.transform.position.x > transform.position.x)
             {
-                state = State.hurt;
-                health--;
-                if (collision.gameObject.transform.position.x > transform.position.x)
-                {
-                    rb.velocity = new Vector2(-HurtForceX, HurtForceY);
-                }
-                else
-                {
-                    rb.velocity = new Vector2(HurtForceX, HurtForceY);
-                }
+                rb.velocity = new Vector2(-HurtForceX, HurtForceY);
+            }
+            else
+            {
+                rb.velocity = new Vector2(HurtForceX, HurtForceY);
             }
         }
 
@@ -207,11 +205,12 @@ public class PlayerController : MonoBehaviour
     void PlayerAttackFireball()
     {
 
-        if (Input.GetKey(KeyCode.X) && !isFireball)
+        if (Input.GetKey(KeyCode.X) && !isFireball && mana>0)
         {
             isFireball = true;
             Instantiate(Fireball, ShotPoint.position, ShotPoint.rotation);
             SpecialAbilityTimer = SpecialAbilityCoolDown;
+            mana--;
         }
         if (SpecialAbilityTimer > 0)
         {
@@ -226,7 +225,7 @@ public class PlayerController : MonoBehaviour
     {
         if (SpecialAbilityTimer <= 0)
         {
-            if (Input.GetKey(KeyCode.C))
+            if (Input.GetKey(KeyCode.C)&& mana>0)
             {
                 if (facingRight == true)
                 {
@@ -238,6 +237,7 @@ public class PlayerController : MonoBehaviour
                 }
                 Instantiate(DashWind, DashPoint.position, DashPoint.rotation);
                 SpecialAbilityTimer = SpecialAbilityCoolDown;
+                mana--;
             }
         }
         else
@@ -249,7 +249,7 @@ public class PlayerController : MonoBehaviour
     {
         if (health <= 0)
         {
-            //Destroy(gameObject);
+            Destroy(gameObject);
         }
     }
 }

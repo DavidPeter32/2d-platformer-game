@@ -22,7 +22,12 @@ public class SkeletonScript : MonoBehaviour
         collider = GetComponent<PolygonCollider2D>();
         rb = GetComponent<Rigidbody2D>();
     }
-
+    void OnDrawGizmosSelected()
+    {
+        // Draw a yellow sphere at the transform's position
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, followRange);
+    }
     // Update is called once per frame
     void Update()
     {

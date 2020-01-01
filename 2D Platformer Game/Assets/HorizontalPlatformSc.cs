@@ -4,48 +4,39 @@ using UnityEngine;
 
 public class HorizontalPlatformSc : MonoBehaviour
 {
-    public enum State { Horizontal,Vertical }
-    public State state ;
-    private Rigidbody2D rb;
-    public float speed = 0.1f;
-    public Transform LeftPiont;
-    public Transform RightPiont;
-    public Transform UpPiont;
-    public Transform DownPiont;
-    public LayerMask Platform;
-    private bool isLeftWall;
-    private bool isRightWall;
 
+    public Transform Point1 ,Point2;
+    public float speed;
+    public Transform startPoint;
 
+    Vector3 nextPos;
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
+        nextPos = startPoint.position;
     }
 
     // Update is called once per frame
     void Update()
     {
         HorizontalMove();
-        Platformmove();
-    }
-    void Platformmove()
-    {
-        rb.velocity = new Vector2(speed, rb.velocity.y);
     }
     void HorizontalMove()
     {
-        isRightWall = Physics2D.Raycast(RightPiont.position, Vector2.right, 0.1f, Platform);
-        if (isRightWall)
+        if (transform.position==Point1.position)
         {
-            speed *= -1;
+            nextPos = Point2.position;
         }
 
-        isLeftWall = Physics2D.Raycast(LeftPiont.position, Vector2.left, 0.1f, Platform);
-        if (isLeftWall)
+        if (transform.position == Point2.position)
         {
-            speed *= -1;
+            nextPos = Point1.position;
         }
+
+        transform.position = Vector3.MoveTowards(transform.position, nextPos, speed * Time.deltaTime);
     }
-    
-    
+    private void OnDrawGizmos()
+    {
+        Gizmos.DrawLine(Point1.position, Point2.position);
+    }
+
 }

@@ -6,7 +6,6 @@ public class PlayerInteraction : MonoBehaviour
 {
 
     public Text CoinCountText;
-    public PlayerMovement Player;
     public int CoinCount = 0;
     private enum Type {coin,fireball,healt,dash }
     private Type type;
