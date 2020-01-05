@@ -32,9 +32,13 @@ public class PlayerController : MonoBehaviour
     public Transform ShotPoint;
     public GameObject DashWind;
     public Transform DashPoint;
+    public GameObject DeathFire;
+    public Transform DeathFirePoint;
     private float SpecialAbilityTimer =0;
     private float SpecialAbilityCoolDown = 0.9f;
     public static bool isFireball;
+    public Text CoinCountText;
+    public int CoinCount = 0;
 
     private static PlayerController instance;
     public static PlayerController Instance
@@ -249,6 +253,7 @@ public class PlayerController : MonoBehaviour
     {
         if (health <= 0)
         {
+            Instantiate(DeathFire, DeathFirePoint.position, DeathFirePoint.rotation);
             Destroy(gameObject);
         }
     }

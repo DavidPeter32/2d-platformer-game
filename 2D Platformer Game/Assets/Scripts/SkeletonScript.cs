@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class SkeletonScript : MonoBehaviour
 {
-    private enum State { rise,walk,death }
+    private enum State { start,rise,walk,goback}
     private State state;
     public float speed;
     private float playerDifference;
@@ -16,6 +16,10 @@ public class SkeletonScript : MonoBehaviour
     private Rigidbody2D rb;
     public GameObject DeathFire;
     public Transform DeathFirePoint;
+    private float AnimTimerStart = 0.33f;
+    private float AnimTimerFinish = 0;
+    private float AnimTimerCooldown = 0.33f;
+    private bool hadRisen;
     void Start()
     {
         anim = GetComponent<Animator>();
@@ -33,6 +37,7 @@ public class SkeletonScript : MonoBehaviour
     {
         anim.SetInteger("State", (int)state);
         folowplayer();
+        StateSet();
     }
     void folowplayer()
     {
@@ -40,9 +45,6 @@ public class SkeletonScript : MonoBehaviour
         if ((Mathf.Abs(playerDifference) < followRange))
         {
             followPlayer = true;
-           // Debug.Log(followPlayer);
-            Debug.Log(playerDifference);
-            state = State.rise;
         }
         else
         {
@@ -64,7 +66,7 @@ public class SkeletonScript : MonoBehaviour
                 rb.velocity = new Vector2(speed, rb.velocity.y);
                 if (facingRight == false )
                 {
-                    flipCharacter();
+                   flipCharacter();
                 }
             }
         }
@@ -76,10 +78,6 @@ public class SkeletonScript : MonoBehaviour
         Scale.x *= -1;
         transform.localScale = Scale;
     }
-    void SkeletonRun()
-    {
-        rb.velocity = new Vector2(speed, rb.velocity.y);
-    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
 
@@ -89,5 +87,31 @@ public class SkeletonScript : MonoBehaviour
             Destroy(gameObject);
 
         }
+    }
+    private void StateSet()
+    {
+        if (followPlayer&& AnimTimerStart > 0)
+        {
+            state = State.rise;
+            AnimTimerStart = AnimTimerStart - Time.deltaTime;
+        }
+        else if(followPlayer && AnimTimerStart <= 0)
+        {
+            state = State.walk;
+            AnimTimerFinish = AnimTimerCooldown;
+            
+        }
+        else if (!followPlayer && AnimTimerFinish > 0)
+        {
+            state = State.goback;
+            AnimTimerFinish = AnimTimerFinish - Time.deltaTime;
+        }
+        else if (!followPlayer && AnimTimerFinish <= 0)
+        {
+            state = State.start;
+            AnimTimerStart = AnimTimerCooldown;
+        }
+
+
     }
 }
