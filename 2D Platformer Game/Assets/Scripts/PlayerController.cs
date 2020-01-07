@@ -2,9 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-public enum State { idl, walk, jump, attack, jumpattack, hurt,fireball,jumpfireball,dash }
+using UnityEngine.SceneManagement;
 public class PlayerController : MonoBehaviour
 {
+    private enum State { idl, walk, jump, attack, jumpattack, hurt, fireball, jumpfireball, dash }
     private State state = State.idl;
     public float speed;
     public float dashspeed;
@@ -13,7 +14,7 @@ public class PlayerController : MonoBehaviour
     public LayerMask Ground;
     public Collider2D AttackTrigger;
     private float moveInput;
-    private bool facingRight = true;
+    private static bool facingRight = true;
     private bool isGrounded;
     private bool jumped;
     private Animator anim;
@@ -25,9 +26,9 @@ public class PlayerController : MonoBehaviour
     private bool isHurt = false;
     public float HurtForceX;
     public float HurtForceY;
-    public int health = 5;
-    public int mana = 10;
-    public Slider HP;
+    //public static int health = 5;
+    //public int mana = 10;
+    //public Slider HP;
     public GameObject Fireball;
     public Transform ShotPoint;
     public GameObject DashWind;
@@ -49,11 +50,27 @@ public class PlayerController : MonoBehaviour
             return instance;
         }
     }
+    //public static int Health
+    //{
+    //    get
+    //    {
+    //        return health;
+    //    }
+    //    set
+    //    {
+    //        health = value;
+    //    }
+    //}
+    
+
+
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
+        
+
         
     }
 
@@ -74,7 +91,7 @@ public class PlayerController : MonoBehaviour
         anim.SetInteger("State", (int)state);
         PlayerAttackFireball();
         Dash();
-        HP.value = health;
+       // HP.value = health;
 
     }
     void FixedUpdate()
@@ -131,7 +148,7 @@ public class PlayerController : MonoBehaviour
     }
     void PlayerAttack1()
     {
-        if (Input.GetKey(KeyCode.Z) && !isAttacking)
+        if (Input.GetKeyDown(KeyCode.Z) && !isAttacking)
         {
             isAttacking = true;
             AttackTrigger.enabled = true;
@@ -154,7 +171,7 @@ public class PlayerController : MonoBehaviour
         if (collision.gameObject.tag == "Enemy")
         {
             state = State.hurt;
-            health--;
+            HealthManaManager.Health--;
             if (collision.gameObject.transform.position.x > transform.position.x)
             {
                 rb.velocity = new Vector2(-HurtForceX, HurtForceY);
@@ -209,12 +226,12 @@ public class PlayerController : MonoBehaviour
     void PlayerAttackFireball()
     {
 
-        if (Input.GetKey(KeyCode.X) && !isFireball && mana>0)
+        if (Input.GetKeyDown(KeyCode.X) && !isFireball && HealthManaManager.Mana>0)
         {
             isFireball = true;
             Instantiate(Fireball, ShotPoint.position, ShotPoint.rotation);
             SpecialAbilityTimer = SpecialAbilityCoolDown;
-            mana--;
+            HealthManaManager.Mana--;
         }
         if (SpecialAbilityTimer > 0)
         {
@@ -229,19 +246,19 @@ public class PlayerController : MonoBehaviour
     {
         if (SpecialAbilityTimer <= 0)
         {
-            if (Input.GetKey(KeyCode.C)&& mana>0)
+            if (Input.GetKeyDown(KeyCode.C)&& HealthManaManager.Mana>0)
             {
                 if (facingRight == true)
                 {
-                    rb.velocity =new Vector2(dashspeed, rb.velocity.y);
+                    rb.velocity = Vector2.right* dashspeed;
                 }
                 else
                 {
-                    rb.velocity = new Vector2(-dashspeed, rb.velocity.y);
+                    rb.velocity = Vector2.left * dashspeed;
                 }
                 Instantiate(DashWind, DashPoint.position, DashPoint.rotation);
                 SpecialAbilityTimer = SpecialAbilityCoolDown;
-                mana--;
+                HealthManaManager.Mana--;
             }
         }
         else
@@ -251,10 +268,12 @@ public class PlayerController : MonoBehaviour
     }
     void PlayerDeath()
     {
-        if (health <= 0)
+        if (HealthManaManager.Health <= 0)
         {
             Instantiate(DeathFire, DeathFirePoint.position, DeathFirePoint.rotation);
-            Destroy(gameObject);
+            Destroy(gameObject,0.1f);
+            SceneManager.LoadScene("Death");
+            HealthManaManager.Health = 5;
         }
     }
 }

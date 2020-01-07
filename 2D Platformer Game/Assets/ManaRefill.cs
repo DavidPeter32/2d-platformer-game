@@ -8,9 +8,9 @@ public class ManaRefill : MonoBehaviour
     {
         if (collision.tag == "Player")
         {
-            if (PlayerController.Instance.mana < 10)
+            if (HealthManaManager.Mana < 10)
             {
-                PlayerController.Instance.mana++;
+                HealthManaManager.Mana++;
             }
             Destroy(gameObject);
         }
