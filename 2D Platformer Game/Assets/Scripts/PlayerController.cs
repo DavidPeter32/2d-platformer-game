@@ -183,6 +183,22 @@ public class PlayerController : MonoBehaviour
         }
 
     }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.tag == "Enemy")
+        {
+            state = State.hurt;
+            HealthManaManager.Health--;
+            if (collision.gameObject.transform.position.x > transform.position.x)
+            {
+                rb.velocity = new Vector2(-HurtForceX, HurtForceY);
+            }
+            else
+            {
+                rb.velocity = new Vector2(HurtForceX, HurtForceY);
+            }
+        }
+    }
     private void StateSet()
     {
         if (state == State.hurt)
@@ -271,7 +287,7 @@ public class PlayerController : MonoBehaviour
         if (HealthManaManager.Health <= 0)
         {
             Instantiate(DeathFire, DeathFirePoint.position, DeathFirePoint.rotation);
-            Destroy(gameObject,0.1f);
+            Destroy(gameObject);
             SceneManager.LoadScene("Death");
             HealthManaManager.Health = 5;
         }
